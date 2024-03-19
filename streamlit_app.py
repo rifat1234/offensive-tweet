@@ -4,9 +4,11 @@ import requests
 
 st.subheader("Offensive tweet detector")
 with st.form("my_form"):
+    model_option_1 = 'TimeLMs (Huggingface LLM Transformer)'
+    model_option_2 = 'Multilayer perceptron'
     option = st.selectbox(
         'Choose your preferred model',
-        ('MLM', 'TimeLMs'))
+        (model_option_1, model_option_2))
     txt = st.text_area("Write your own tweet and check if it is offensive or not", max_chars=140)
 
     # Every form must have a submit button.
@@ -19,7 +21,7 @@ with st.form("my_form"):
             st.markdown("This tweet is :green[**not Offensive**]")
 
     if submitted:
-        if option == 'MLM':
+        if option == model_option_2:
             @st.cache_resource
             def load_model(model_file, vectorizer_file):
                 model = pickle.load(open(model_file, 'rb'))
@@ -48,7 +50,7 @@ with st.form("my_form"):
                 response = requests.post(API_URL, headers=headers, json=payload)
                 return response.json()
 
-            API_TOKEN = st.secrets['API_TOKEN']
+            API_TOKEN = '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'#st.secrets['API_TOKEN']
             headers = {"Authorization": f"Bearer {API_TOKEN}"}
             API_URL = "https://api-inference.huggingface.co/models/rifatmonzur/offensiveTweet"
 
