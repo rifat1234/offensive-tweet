@@ -12,6 +12,13 @@ Classify your Tweet fast and on-the-fly with this mighty app. Check if your twee
 
 <img src ="https://github.com/rifat1234/offensive-tweet/blob/main/Project_UI.png" width="1200px"></img>
 
+## How to run this demo
+
+Clone this repo and then run with:
+```
+streamlit run streamlit_app.py
+```
+
 ### Questions? Comments?
 
 Please ask at rifatmonzur@gmail.com
