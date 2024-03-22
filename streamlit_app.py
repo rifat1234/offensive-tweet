@@ -108,7 +108,7 @@ with st.form("my_form"):
                     response = requests.post(API_URL, headers=headers, json=payload)
                     return response.json()
 
-                API_TOKEN = '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'#st.secrets['API_TOKEN']
+                API_TOKEN = st.secrets['API_TOKEN']
                 headers = {"Authorization": f"Bearer {API_TOKEN}"}
                 API_URL = "https://api-inference.huggingface.co/models/rifatmonzur/offensiveTweet"
 
