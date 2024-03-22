@@ -2,26 +2,69 @@ import streamlit as st
 import pickle
 import requests
 
-st.subheader("Offensive tweet detector")
+#######################################################
+
+# The code below is to control the layout width of the app.
+if "widen" not in st.session_state:
+    layout = "centered"
+else:
+    layout = "wide" if st.session_state.widen else "centered"
+
+#######################################################
+
+# The code below is for the title and logo.
+title = "Offensive Tweet Classifier"
+st.set_page_config(layout=layout, page_title=title, page_icon="🤗")
+st.subheader(title)
+#######################################################
+
+st.sidebar.header('About')
+st.markdown("""
+Classify Tweet on-the-fly with this mighty app. Check if your tweet is `Offensive` or `Not Offensive`. 🚀
+""")
+st.sidebar.markdown("""
+App is created using 🎈[Streamlit](https://streamlit.io/), [PyTorch](https://pytorch.org) and [HuggingFace](https://huggingface.co/inference-api)'s [TimeLMs offensive tweet](https://huggingface.co/rifatmonzur/offensiveTweet) model.
+""")
+st.sidebar.markdown("""
+[OLID dataset](https://www.kaggle.com/datasets/feyzazkefe/olid-dataset/data) is used to finetune [TimeLMs](https://huggingface.co/cardiffnlp/twitter-roberta-base-offensive)
+""")
+st.sidebar.markdown("""
+Developed by [Rifat Monzur](https://www.linkedin.com/in/rifatmonzur/)
+""")
+
+st.sidebar.header("Resources")
+st.sidebar.markdown(
+    """
+- [Source Code](https://github.com/rifat1234/offensive-tweet)
+- Project [Report](https://www.overleaf.com/read/jbszjmptxtzd#9ea583)
+- [Hugging Face Model Inference API](https://huggingface.co/rifatmonzur/offensiveTweet)
+"""
+)
+
 with st.form("my_form"):
     model_option_1 = 'TimeLMs (Huggingface LLM Transformer)'
     model_option_2 = 'Multilayer perceptron'
+    offensive_tweet = "@USER is so unattractive. I understand why her husband left her."
     option = st.selectbox(
         'Choose your preferred model',
         (model_option_1, model_option_2))
-    txt = st.text_area("Write your own tweet and check if it is offensive or not", max_chars=140)
+    txt = st.text_area("Write your own tweet and check if it is offensive or not",
+                       value=offensive_tweet, max_chars=140)
 
     # Every form must have a submit button.
     submitted = st.form_submit_button("Submit")
 
     def print_verdict_message(label):
         if label == 'OFF':
-            st.markdown("This tweet is :red[**Offensive**]")
+            st.success("This tweet is :red[**Offensive**]")
+        elif label == 'NOT':
+            st.success("This tweet is :green[**not Offensive**]")
         else:
-            st.markdown("This tweet is :green[**not Offensive**]")
-
+            st.error("Check your internet connection")
     if submitted:
-        if option == model_option_2:
+        if len(txt.strip()) == 0:
+            st.error("Tweet need to have at least one character")
+        elif option == model_option_2:
             @st.cache_resource
             def load_model(model_file, vectorizer_file):
                 model = pickle.load(open(model_file, 'rb'))
@@ -54,11 +97,17 @@ with st.form("my_form"):
             headers = {"Authorization": f"Bearer {API_TOKEN}"}
             API_URL = "https://api-inference.huggingface.co/models/rifatmonzur/offensiveTweet"
 
-            data = query({
-                "inputs": f"{preprocess(txt)}",
-                "options": {"wait_for_model": True}
-            })
+            try:
+                data = query({
+                    "inputs": f"{preprocess(txt)}",
+                    "options": {"wait_for_model": True}
+                })
+                verdict = 'OFF' if data[0][0]['label'] == 'offensive' else 'NOT'
+                print_verdict_message(verdict)
+            except:
+                print_verdict_message("error")
 
-            verdict = 'OFF' if data[0][0]['label'] == 'offensive' else 'NOT'
-            print_verdict_message(verdict)
+    else:
+        if txt == offensive_tweet:
+            print_verdict_message('OFF')
 
