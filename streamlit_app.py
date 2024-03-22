@@ -76,50 +76,51 @@ with st.form("my_form"):
         else:
             st.error("Check your internet connection")
     if submitted:
-        if len(txt.strip()) == 0:
-            st.error("Tweet need to have at least one character")
-        elif option == model_option_2:
-            @st.cache_resource
-            def load_model(model_file, vectorizer_file):
-                model = pickle.load(open(model_file, 'rb'))
-                vectorizer = pickle.load(open(vectorizer_file, 'rb'))
-                return model, vectorizer
+        with st.spinner('Please wait...'):
+            if len(txt.strip()) == 0:
+                st.error("Tweet need to have at least one character")
+            elif option == model_option_2:
+                @st.cache_resource
+                def load_model(model_file, vectorizer_file):
+                    model = pickle.load(open(model_file, 'rb'))
+                    vectorizer = pickle.load(open(vectorizer_file, 'rb'))
+                    return model, vectorizer
 
-            def prepare_dataset(tweets, count_vectorizer):
-                values = count_vectorizer.transform(tweets)
-                return values
+                def prepare_dataset(tweets, count_vectorizer):
+                    values = count_vectorizer.transform(tweets)
+                    return values
 
-            model, vectorizer = load_model('model1/model.sav', 'model1/vectorizer.sav')
-            values = prepare_dataset([txt], vectorizer)
-            pred = model.predict(values)
-            print_verdict_message(pred)
-        else:
-            def preprocess(text):
-                preprocessed_text = []
-                for t in text.split():
-                    if len(t) > 1:
-                        t = '@user' if t[0] == '@' and t.count('@') == 1 else t
-                        t = 'http' if t.startswith('http') else t
-                    preprocessed_text.append(t)
-                return ' '.join(preprocessed_text)
+                model, vectorizer = load_model('model1/model.sav', 'model1/vectorizer.sav')
+                values = prepare_dataset([txt], vectorizer)
+                pred = model.predict(values)
+                print_verdict_message(pred)
+            else:
+                def preprocess(text):
+                    preprocessed_text = []
+                    for t in text.split():
+                        if len(t) > 1:
+                            t = '@user' if t[0] == '@' and t.count('@') == 1 else t
+                            t = 'http' if t.startswith('http') else t
+                        preprocessed_text.append(t)
+                    return ' '.join(preprocessed_text)
 
-            def query(payload):
-                response = requests.post(API_URL, headers=headers, json=payload)
-                return response.json()
+                def query(payload):
+                    response = requests.post(API_URL, headers=headers, json=payload)
+                    return response.json()
 
-            API_TOKEN = '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'#st.secrets['API_TOKEN']
-            headers = {"Authorization": f"Bearer {API_TOKEN}"}
-            API_URL = "https://api-inference.huggingface.co/models/rifatmonzur/offensiveTweet"
+                API_TOKEN = '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'#st.secrets['API_TOKEN']
+                headers = {"Authorization": f"Bearer {API_TOKEN}"}
+                API_URL = "https://api-inference.huggingface.co/models/rifatmonzur/offensiveTweet"
 
-            try:
-                data = query({
-                    "inputs": f"{preprocess(txt)}",
-                    "options": {"wait_for_model": True}
-                })
-                verdict = 'OFF' if data[0][0]['label'] == 'offensive' else 'NOT'
-                print_verdict_message(verdict)
-            except:
-                print_verdict_message("error")
+                try:
+                    data = query({
+                        "inputs": f"{preprocess(txt)}",
+                        "options": {"wait_for_model": True}
+                    })
+                    verdict = 'OFF' if data[0][0]['label'] == 'offensive' else 'NOT'
+                    print_verdict_message(verdict)
+                except:
+                    print_verdict_message("error")
 
     else:
         if txt == offensive_tweet:
