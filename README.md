@@ -10,8 +10,8 @@ Classify your Tweet fast and on-the-fly with this mighty app. Check if your twee
 - [OLID dataset](https://www.kaggle.com/datasets/feyzazkefe/olid-dataset/data) is used to finetune [TimeLMs](https://huggingface.co/cardiffnlp/twitter-roberta-base-offensive)
 - Deployed on [Streamlit Cloud](https://streamlit.io/cloud) ☁️
 
-<img src ="https://user-images.githubusercontent.com/27242399/166001680-16a9e894-da21-405c-a8cc-37ad9364c254.png" width="600px"></img>
+<img src ="https://github.com/rifat1234/offensive-tweet/blob/main/Project_UI.png" width="1200px"></img>
 
 ### Questions? Comments?
 
-Please ask in the [Streamlit community](https://discuss.streamlit.io).
+Please ask at rifatmonzur@gmail.com
