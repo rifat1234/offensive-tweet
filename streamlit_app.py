@@ -15,7 +15,21 @@ else:
 # The code below is for the title and logo.
 title = "Offensive Tweet Classifier"
 st.set_page_config(layout=layout, page_title=title, page_icon="🤗")
-st.subheader(title)
+# The block of code below is to display the title, logos and introduce the app.
+
+c1, c2 = st.columns([0.4, 2])
+
+with c1:
+
+    st.image(
+        "logo.png",
+        width=110,
+    )
+
+with c2:
+
+    st.caption("")
+    st.title(title)
 #######################################################
 
 st.sidebar.header('About')
@@ -23,7 +37,7 @@ st.markdown("""
 Classify Tweet on-the-fly with this mighty app. Check if your tweet is `Offensive` or `Not Offensive`. 🚀
 """)
 st.sidebar.markdown("""
-App is created using 🎈[Streamlit](https://streamlit.io/), [PyTorch](https://pytorch.org) and [HuggingFace](https://huggingface.co/inference-api)'s [TimeLMs offensive tweet](https://huggingface.co/rifatmonzur/offensiveTweet) model.
+App is created using 🎈[Streamlit](https://streamlit.io/) and [HuggingFace](https://huggingface.co/inference-api)'s [TimeLMs offensive tweet](https://huggingface.co/rifatmonzur/offensiveTweet) model.
 """)
 st.sidebar.markdown("""
 [OLID dataset](https://www.kaggle.com/datasets/feyzazkefe/olid-dataset/data) is used to finetune [TimeLMs](https://huggingface.co/cardiffnlp/twitter-roberta-base-offensive)
@@ -36,7 +50,7 @@ st.sidebar.header("Resources")
 st.sidebar.markdown(
     """
 - [Source Code](https://github.com/rifat1234/offensive-tweet)
-- Project [Report](https://www.overleaf.com/read/jbszjmptxtzd#9ea583)
+- [Project Report](https://www.overleaf.com/read/jbszjmptxtzd#9ea583)
 - [Hugging Face Model Inference API](https://huggingface.co/rifatmonzur/offensiveTweet)
 """
 )
