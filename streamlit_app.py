@@ -38,7 +38,7 @@ Classify Tweet on-the-fly with this mighty app. Check if your tweet is `Offensiv
 """)
 st.sidebar.markdown("""
 App is created using [Pytorch](https://pytorch.org), [HuggingFace](https://huggingface.co/inference-api)  and 🎈[Streamlit](https://streamlit.io/).
-[OLID](https://www.kaggle.com/datasets/feyzazkefe/olid-dataset/data) dataset is used to finetune large languge model (LLM).""")
+Large language model (LLM) is finetuned using [OLID](https://www.kaggle.com/datasets/feyzazkefe/olid-dataset/data) dataset.""")
 st.sidebar.markdown("""
 Developed by [Rifat Monzur](https://www.linkedin.com/in/rifatmonzur/)
 """)
@@ -105,7 +105,7 @@ with st.form("my_form"):
                     response = requests.post(API_URL, headers=headers, json=payload)
                     return response.json()
 
-                API_TOKEN = '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'#st.secrets['API_TOKEN']
+                API_TOKEN = st.secrets['API_TOKEN']
                 headers = {"Authorization": f"Bearer {API_TOKEN}"}
                 API_URL = "https://api-inference.huggingface.co/models/rifatmonzur/offensiveTweet"
 
