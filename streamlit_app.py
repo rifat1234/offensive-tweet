@@ -34,7 +34,7 @@ with c2:
 
 st.sidebar.header('About')
 st.markdown("""
-Classify Tweet on-the-fly with this mighty app. Check if your tweet is `Offensive` or `Not Offensive`. 🚀
+Classify **English** Tweet on-the-fly with this app. Check if your tweet is `Offensive` or `Not Offensive`. 🚀
 """)
 st.sidebar.markdown("""
 App is created using [Pytorch](https://pytorch.org), [HuggingFace](https://huggingface.co/inference-api)  and 🎈[Streamlit](https://streamlit.io/).
@@ -47,7 +47,7 @@ st.sidebar.header("Resources")
 st.sidebar.markdown(
     """
 - [Source Code](https://github.com/rifat1234/offensive-tweet)
-- [Project Report](https://www.overleaf.com/read/jbszjmptxtzd#9ea583)
+- [Project Report](https://github.com/rifat1234/offensive-tweet/blob/main/project_report.pdf)
 - [Hugging Face Model Inference API](https://huggingface.co/rifatmonzur/offensiveTweet)
 """
 )
@@ -61,7 +61,6 @@ with st.form("my_form"):
         (model_option_1, model_option_2))
     txt = st.text_area("Write your own tweet and check if it is offensive or not",
                        value=offensive_tweet, max_chars=140)
-
     # Every form must have a submit button.
     submitted = st.form_submit_button("Submit")
 
@@ -72,10 +71,11 @@ with st.form("my_form"):
             st.success("This tweet is :green[**not Offensive**]")
         else:
             st.error("Check your internet connection")
+
     if submitted:
         with st.spinner('Please wait...'):
             if len(txt.strip()) == 0:
-                st.error("Tweet need to have at least one character")
+                st.warning("Tweet needs to have at least one character")
             elif option == model_option_2:
                 @st.cache_resource
                 def load_model(model_file, vectorizer_file):
@@ -118,8 +118,8 @@ with st.form("my_form"):
                     print_verdict_message(verdict)
                 except:
                     print_verdict_message("error")
-
     else:
         if txt == offensive_tweet:
             print_verdict_message('OFF')
+
 
